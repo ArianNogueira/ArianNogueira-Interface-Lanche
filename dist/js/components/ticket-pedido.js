@@ -2,9 +2,16 @@ let card = [];
 const container = document.getElementById("container");
 const cardIntemsContainer = document.getElementById("extrato-ticket");
 const cartTotal = document.getElementById("card-total");
+const selectBarbecues = document.querySelectorAll('input[name="barbecue"]');
+const selectfriedPastrys = document.querySelectorAll('input[name="fried-pastry"]');
+const extratoPedido = document.getElementById("extrato-pedido_div");
+const mensagemExtrato = document.getElementById("mensagem-extrato");
 container.addEventListener("click", function (evento) {
     const target = evento.target;
     let adiconarItem = target.closest(".adicionar-item");
+    if (adiconarItem) {
+        abrirExtratoPedido(true);
+    }
     if (adiconarItem) {
         const nome = adiconarItem.getAttribute("data-name");
         const valor = parseFloat(adiconarItem.getAttribute("data-price")).toFixed(2);
@@ -12,6 +19,18 @@ container.addEventListener("click", function (evento) {
         addCard(nome, valor, src);
     }
 });
+function abrirExtratoPedido(ativo) {
+    if (ativo === true) {
+        extratoPedido.style.display = "block";
+        mensagemExtrato.style.display = "none";
+        updateCardMOdal();
+    }
+    else {
+        extratoPedido.style.display = "none";
+        mensagemExtrato.style.display = "block";
+        updateCardMOdal();
+    }
+}
 function addCard(nome, valor, src) {
     // if (nome === "Caldo de Ovos") {
     //     nome = functionSelectPriceBroth();
@@ -24,20 +43,22 @@ function addCard(nome, valor, src) {
     //         valor = selectPrice;
     //     }
     // }
-    // if (nome === "Churrasco") {
-    //     nome = functionSelectBarbecue()
-    //     if (nome === null) {
-    //         nullCase("do Churrasco")
-    //         return;
-    //     }
-    // }
-    // if (nome === "Pastel") {
-    //     nome = functionSelectfriedPastry();
-    //     if (nome === null) {
-    //         nullCase("do Pastel")
-    //         return;
-    //     }
-    // }
+    if (nome === "Churrasco") {
+        nome = functionSelectBarbecue();
+        if (nome === null) {
+            alert("É necessário escolher uma opção!");
+            abrirExtratoPedido(false);
+            return;
+        }
+    }
+    if (nome === "Pastel") {
+        nome = functionSelectfriedPastry();
+        if (nome === null) {
+            alert("É necessário escolher uma opção!");
+            abrirExtratoPedido(false);
+            return;
+        }
+    }
     // if (nome === "Batata Frita") {
     //     nome = getFriesValue();
     //     if (nome === null) {
@@ -49,6 +70,26 @@ function addCard(nome, valor, src) {
     //         valor = selectPrice;
     //     }
     // }
+    function functionSelectBarbecue() {
+        let selectValue = null;
+        selectBarbecues.forEach(selectBarbecue => {
+            if (selectBarbecue.checked) {
+                selectValue = selectBarbecue.value;
+                selectBarbecue.checked = false;
+            }
+        });
+        return selectValue;
+    }
+    function functionSelectfriedPastry() {
+        let selectValue = null;
+        selectfriedPastrys.forEach(selectfriedPastry => {
+            if (selectfriedPastry.checked) {
+                selectValue = selectfriedPastry.value;
+                selectfriedPastry.checked = false;
+            }
+        });
+        return selectValue;
+    }
     const existingITem = card.find(item => item.nome === nome);
     if (existingITem) {
         existingITem.quantidade += 1;
@@ -98,6 +139,7 @@ function updateCardMOdal() {
             // verifica se o item for menor que 1 e excluir do carrinho, do contránio apenas diminue a quantidade
             if (item.quantidade <= 1) {
                 carItemElement.remove();
+                abrirExtratoPedido(false);
                 const index = card.indexOf(item);
                 if (index > -1) {
                     card.splice(index, 1);
@@ -108,7 +150,6 @@ function updateCardMOdal() {
         });
         // aumenta a quantidade do carrinho
         moreBtn.addEventListener("click", function () {
-            console.log("teste");
             item.quantidade++;
             updateCardMOdal();
         });
@@ -126,16 +167,21 @@ cardIntemsContainer.addEventListener("click", function (evento) {
     const target = evento.target;
     if (target.classList.contains("remove-from-cart-btn")) {
         const nome = target.getAttribute("data-nome");
-        console.log(nome);
         removeItemCart(nome);
     }
 });
 // Função para remover 
 function removeItemCart(nome) {
     const index = card.findIndex(item => item.nome === nome);
-    console.log(index);
     if (index !== -1) {
         card.splice(index, 1);
+        updateCardMOdal();
+    }
+    verificaQuantidade();
+}
+function verificaQuantidade() {
+    if (card.length < 1) {
+        abrirExtratoPedido(false);
         updateCardMOdal();
     }
 }

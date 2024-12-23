@@ -3,10 +3,18 @@ let card = [];
 const container = document.getElementById("container")
 const cardIntemsContainer = document.getElementById("extrato-ticket");
 const cartTotal = document.getElementById("card-total");
+const selectBarbecues = document.querySelectorAll('input[name="barbecue"]') as NodeListOf<HTMLInputElement>;
+const selectfriedPastrys = document.querySelectorAll('input[name="fried-pastry"]') as NodeListOf<HTMLInputElement>;
+const extratoPedido = document.getElementById("extrato-pedido_div")
+const mensagemExtrato = document.getElementById("mensagem-extrato")
 
 container.addEventListener("click", function (evento) {
   const target = evento.target as HTMLElement;
   let adiconarItem = target.closest(".adicionar-item");
+
+  if (adiconarItem) {
+    abrirExtratoPedido(true)
+  }
 
   if (adiconarItem) {
     const nome: string = adiconarItem.getAttribute("data-name");
@@ -16,6 +24,19 @@ container.addEventListener("click", function (evento) {
     addCard(nome, valor, src)
   }
 })
+
+function abrirExtratoPedido(ativo: boolean) {
+  if (ativo === true) {
+    extratoPedido.style.display = "block"
+    mensagemExtrato.style.display = "none"
+    updateCardMOdal()
+  } else {
+    extratoPedido.style.display = "none"
+    mensagemExtrato.style.display = "block"
+    updateCardMOdal()
+  }
+
+}
 
 function addCard(nome: string, valor: string, src: string) {
   // if (nome === "Caldo de Ovos") {
@@ -30,21 +51,23 @@ function addCard(nome: string, valor: string, src: string) {
   //     }
   // }
 
-  // if (nome === "Churrasco") {
-  //     nome = functionSelectBarbecue()
-  //     if (nome === null) {
-  //         nullCase("do Churrasco")
-  //         return;
-  //     }
-  // }
+  if (nome === "Churrasco") {
+    nome = functionSelectBarbecue()
+    if (nome === null) {
+      alert("É necessário escolher uma opção!")
+      abrirExtratoPedido(false)
+      return;
+    }
+  }
 
-  // if (nome === "Pastel") {
-  //     nome = functionSelectfriedPastry();
-  //     if (nome === null) {
-  //         nullCase("do Pastel")
-  //         return;
-  //     }
-  // }
+  if (nome === "Pastel") {
+    nome = functionSelectfriedPastry();
+    if (nome === null) {
+      alert("É necessário escolher uma opção!")
+      abrirExtratoPedido(false)
+      return;
+    }
+  }
 
   // if (nome === "Batata Frita") {
   //     nome = getFriesValue();
@@ -57,6 +80,29 @@ function addCard(nome: string, valor: string, src: string) {
   //         valor = selectPrice;
   //     }
   // }
+
+  function functionSelectBarbecue() {
+    let selectValue = null
+    selectBarbecues.forEach(selectBarbecue => {
+      if (selectBarbecue.checked) {
+        selectValue = selectBarbecue.value;
+        selectBarbecue.checked = false
+      }
+
+    })
+    return selectValue;
+  }
+
+  function functionSelectfriedPastry() {
+    let selectValue = null
+    selectfriedPastrys.forEach(selectfriedPastry => {
+      if (selectfriedPastry.checked) {
+        selectValue = selectfriedPastry.value;
+        selectfriedPastry.checked = false
+      }
+    })
+    return selectValue;
+  }
 
   const existingITem = card.find(item => item.nome === nome);
   if (existingITem) {
@@ -111,6 +157,7 @@ function updateCardMOdal() {
       // verifica se o item for menor que 1 e excluir do carrinho, do contránio apenas diminue a quantidade
       if (item.quantidade <= 1) {
         carItemElement.remove();
+        abrirExtratoPedido(false)
         const index = card.indexOf(item);
         if (index > -1) {
           card.splice(index, 1);
@@ -122,7 +169,6 @@ function updateCardMOdal() {
 
     // aumenta a quantidade do carrinho
     moreBtn.addEventListener("click", function () {
-      console.log("teste");
       item.quantidade++
       updateCardMOdal()
     })
@@ -142,21 +188,25 @@ cardIntemsContainer.addEventListener("click", function (evento) {
   // verifica se a classe atribuida ao botão e armazena o atributo do nome do alimento
   const target = evento.target as HTMLElement
   if (target.classList.contains("remove-from-cart-btn")) {
-      const nome = target.getAttribute("data-nome")
-      console.log(nome);
-      
-      removeItemCart(nome);
+    const nome = target.getAttribute("data-nome")
+    removeItemCart(nome);
   }
 })
 
 // Função para remover 
 function removeItemCart(nome: string) {
   const index = card.findIndex(item => item.nome === nome)
-  console.log(index);
-  
-  if (index !== -1) {
-      card.splice(index, 1);
-      updateCardMOdal();
-  }
 
+  if (index !== -1) {
+    card.splice(index, 1);
+    updateCardMOdal();
+  }
+  verificaQuantidade()
+}
+
+function verificaQuantidade() {
+  if(card.length < 1) {
+    abrirExtratoPedido(false)
+    updateCardMOdal()
+  }
 }

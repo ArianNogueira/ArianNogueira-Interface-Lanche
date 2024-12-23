@@ -178,16 +178,16 @@
                     </div>
                     <div class="flex flex-col my-5 gap-y-2">
                         <p class="text-lg font-bold">Pastel</p>
-                        <form class="flex justify-between" id="select-barbecue">
+                        <form class="flex justify-between" id="select-fried-pastry">
                             <div class="flex flex-col ">
                                 <laber>
-                                    <input type="radio" name="barbecue" value="Pastel Queijo"> Queijo
+                                    <input type="radio" name="fried-pastry" value="Pastel Queijo"> Queijo
                                 </laber>
                                 <laber>
-                                    <input type="radio" name="barbecue" value="Pastel Carne"> Carne
+                                    <input type="radio" name="fried-pastry" value="Pastel Carne"> Carne
                                 </laber>
                                 <laber>
-                                    <input type="radio" name="barbecue" value="Pastel Pizza"> Pizza
+                                    <input type="radio" name="fried-pastry" value="Pastel Pizza"> Pizza
                                 </laber>
                             </div>
                         </form>
@@ -353,42 +353,43 @@
         </div>
 
         <aside id="extrato-pedido">
-            <div class="mb-3">
-                <i class="fa fa-print" aria-hidden="true"></i>
+            <div id="mensagem-extrato">
+                <p>Ainda não há nenhum pedido</p>
             </div>
-
-            <div id="extrato-ticket">
-
+            <div id="extrato-pedido_div" class="hidden">
+                <div class="mb-3">
+                    <i class="fa fa-print" aria-hidden="true"></i>
+                </div>
+                <div id="extrato-ticket">
+                </div>
+                <div class="flex justify-between mt-10">
+                    <strong>TOTAL:</strong>
+                    <span id="card-total">R$ 0,00</span>
+                </div>
+                <div>
+                    <h3 class="text-xl text-[#382110] font-bold mb-2 mt-5">Pagamento</h3>
+                    <form class="flex flex-col gap-y-3">
+                        <label class="flex justify-between cursor-pointer">
+                            <p><i class="fa-solid fa-money-bill"></i> Dinheiro</p>
+                            <input type="radio" name="payment" value="Dinheiro">
+                        </label>
+                        <label class="flex justify-between cursor-pointer">
+                            <p><i class="fa-brands fa-pix"></i> Pix </p>
+                            <input type="radio" name="payment" value="Pix">
+                        </label>
+                        <label class="flex justify-between cursor-pointer">
+                            <p><i class="fa-solid fa-credit-card"></i> Débito </p>
+                            <input type="radio" name="payment" value="Débito">
+                        </label>
+                        <label class="flex justify-between cursor-pointer">
+                            <p><i class="fa-solid fa-credit-card"></i> Crédito </p>
+                            <input type="radio" name="payment" value="Crédito">
+                        </label>
+                    </form>
+                </div>
             </div>
-
-            <div class="flex justify-between mt-10">
-                <p>Total:</p>
-                <span id="card-total">R$ 0,00</span>
-            </div>
-
-            <!-- <div class="flex flex-col gap-2">
-                    <h3 class="text-xl text-[#382110] font-bold mb-2">Pagamento</h3>
-                    <div class="flex gap-x-3">
-                        <p class="bg-[#d3d3d3] rounded font-semibold px-2"><i class="fa-solid fa-money-bill"></i>
-                            Dinheiro</p>
-                        <p class="bg-[#d3d3d3] rounded font-semibold px-2"><i class="fa-brands fa-pix"></i> Pix Manual:
-                            3243243242432</p>
-                    </div>
-                    <p class="font-bold mt-2">Cartões:</p>
-                    <div>
-                        <ul class="flex gap-3">
-                            <li class="bg-[#d3d3d3] rounded font-semibold px-2"><i class="fa-solid fa-credit-card"></i>
-                                Elo</li>
-                            <li class="bg-[#d3d3d3] rounded font-semibold px-2"><i class="fa-brands fa-cc-visa"></i>
-                                Visa</li>
-                            <li class="bg-[#d3d3d3] rounded font-semibold px-2"><i
-                                    class="fa-brands fa-cc-mastercard"></i> Mastercad</li>
-                        </ul>
-                    </div>
-                </div> -->
         </aside>
     </main>
-
     <script type="module" src="js/components/ticket-pedido.js"></script>
 </body>
 
